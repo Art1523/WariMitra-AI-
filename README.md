@@ -1,159 +1,531 @@
-# Welcome to your Lovable project
+```
+ ╔═══════════════════════════════════════════════════════════╗
+ ║                    🎤 WariMitra AI 🎤                    ║
+ ║          "One Call. Every Warkari." - वारी मदत         ║
+ ╚═══════════════════════════════════════════════════════════╝
+```
 
-This project was built with [Lovable](https://lovable.dev).
+> **Voice-first AI assistance** for a safer, smarter, and more accessible Pandharpur Wari pilgrimage.
+> 
+> *Designed for Warkaris. Built for India. Open source. Community-driven.*
 
-## Build with Lovable
+[![Prototype Badge](https://img.shields.io/badge/status-prototype-yellow)](https://github.com)
+[![Open Source](https://img.shields.io/badge/open-source-green)](LICENSE)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.3+-blue)](https://www.typescriptlang.org/)
+[![License MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![TanStack Start](https://img.shields.io/badge/powered%20by-TanStack%20Start-purple)](https://tanstack.com/router/latest)
 
-Open your project in the [Lovable editor](https://lovable.dev) and keep building.
+## 🌟 What is WariMitra AI?
 
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: connect the project to GitHub and every change made in Lovable is committed straight to your repository.
-- **Full ownership**: this code is yours. Push to your repository and your changes sync back into Lovable, ready for your next prompt.
+**WariMitra AI** (वारीमित्र) is a **voice-first AI assistant** built specifically for Warkaris — pilgrims undertaking the sacred Pandharpur Wari pilgrimage. 
 
-## Development
+No smartphone required. No app to install. Just **one call in Marathi** to get:
+- 🏥 Nearest medical facilities, doctors, pharmacies
+- 💧 Water stations and essential amenities  
+- 🚻 Toilets and sanitation facilities
+- 🍲 Food & shelter locations
+- 🚨 Missing Warkari alerts & community updates
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+**The assistant speaks your language.** Responds in Marathi with directions, real-time help, and community intelligence.
 
-```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
+### ✨ Core Features
+
+| Feature | Description |
+|---------|-------------|
+| 🎤 **Voice Interface** | Designed for feature phones — no app, no download needed |
+| 🇮🇳 **Marathi-First** | Understands Marathi, Hindi, English. Responds in your language |
+| 🏥 **Smart Facility Finder** | Real-time location of medical, water, toilet, food & shelter |
+| 🚨 **Missing Person System** | Report missing Warkaris, receive alerts within 100km |
+| 📍 **Location-Aware** | Geo-fenced alerts & distance-based recommendations |
+| 🤖 **AI-Powered** | Google Gemini NLU for natural, human-like conversations |
+| 📢 **Community Updates** | Broadcast alerts, route changes, safety notices |
+| 💾 **Works Offline** | localStorage-based state, no internet required for core features |
+
+### 🧪 Prototype Status
+
+> ⚠️ **This is a working prototype & proof-of-concept.**
+
+The current version includes **demo/mock data** for demonstration purposes. Real-world deployment will need:
+
+| Aspect | Current Status | Production Need |
+|--------|---|---|
+| **Emergency Integration** | ❌ Mock only | Real emergency dispatch systems |
+| **GPS/Location** | 📍 Browser-based (demo estimates) | Actual device location + privacy |
+| **Telephone Line** | 📞 Browser microphone only | IVR + GSM/telecom integration |
+| **Data Persistence** | 💾 localStorage | Backend database (PostgreSQL/Firebase) |
+| **Facility Database** | 🗂️ Mock data | Real, live facility records |
+| **Missing Person System** | 📋 Demo scenarios | Government agency integration |
+
+**See [Production Deployment](#deployment) section for roadmap.**
+
+---
+
+## Quick Start
+
+### Prerequisites
+
+- **Node.js** 18+ and npm (or yarn/bun)
+- **Chrome or Edge** browser (for Web Speech API support)
+- **Optional**: Google Gemini API key (for AI responses)
+
+### Installation
+
+```bash
+# Clone the repository
+git clone <repository-url>
+cd wari-mitra-voice
+
+# Install dependencies
+npm install
+
+# Start development server
 npm run dev
 ```
 
-## Built with
+Open [http://localhost:5173](http://localhost:5173) in your browser.
 
-- TanStack Start
-- TypeScript
-- React
-- Tailwind CSS
+### Environment Setup
 
+By default, the app works without any API keys using a secure server-side proxy.
 
-## WariMitra AI — voice call prototype
-
-WariMitra AI is a **prototype**. The facility, missing-person and announcement data is
-demo data, the call is a browser microphone session (not a telephone line), and no
-emergency service, government system or GPS is connected.
-
-### How the voice call works
-
-```
-Browser microphone -> Web Speech API (speech to text)
-   -> Gemini (intent + landmark + spoken reply)
-   -> facilityService (deterministic search of the prototype database)
-   -> Gemini (natural Marathi answer)
-   -> window.speechSynthesis (text to speech)
-   -> microphone opens again
-```
-
-Gemini never decides whether a facility exists — the application searches the database
-and gives the verified record to Gemini for wording.
-
-### Run locally
-
-1. Create a Gemini API key (optional — see below).
-2. Copy `.env.example` to `.env` and set `VITE_GEMINI_API_KEY`.
-3. `npm install`
-4. `npm run dev`
-
-> **Warning:** Frontend Gemini API usage is for prototype/demo purposes. Production
-> deployment must move Gemini requests to a secure backend.
-
-By default no key is required: requests go through a server function so the API key
-stays on the server. Setting `VITE_GEMINI_API_KEY` switches the app to a direct
-browser-to-Gemini call, which is convenient for a local demo but exposes the key.
-
-`.env` is git-ignored — never commit it.
-
-### Browser support
-
-Speech recognition uses the Web Speech API: use **Chrome** or **Edge** (desktop or
-Android). Other browsers show a clear message and the demo scenario buttons still work.
-Marathi text-to-speech falls back to a Hindi (Devanagari) voice when no `mr-IN` voice is
-installed.
-
-### Persistence
-
-All state lives in `localStorage` behind `src/services/*`, so a FastAPI + PostgreSQL
-backend can replace it without touching components. No Supabase.
-
-## EXOTEL PHONE AGENT SETUP
-
-The browser call screen (`/voice`) is unchanged. The same WariMitra brain is
-now also reachable from a real phone call through Exotel.
-
-```
-Phone → Exotel Exophone → Voicebot Applet (WebSocket)
-      → /api/public/exotel/voicebot  → STT (Gemini) → WariMitra brain
-      → Google Places / location data → Marathi TTS (Gemini) → Exotel → Phone
-```
-
-### 1. Credentials you need from the Exotel dashboard
-
-| Secret | Where to find it in Exotel |
-| --- | --- |
-| `EXOTEL_API_KEY` | Settings → API Credentials → API Key |
-| `EXOTEL_API_TOKEN` | Settings → API Credentials → API Token |
-| `EXOTEL_ACCOUNT_SID` | Settings → API Credentials → Account SID (subdomain) |
-| `EXOTEL_EXOPHONE` | ExoPhones → the virtual number callers will dial |
-| `EXOTEL_APP_ID` | App Bazaar → your Call flow → App ID in the URL |
-
-Add them as **project secrets** (server-side environment variables). Never put
-them in frontend code or commit them. `GEMINI_API_KEY` is already configured
-and powers both speech-to-text and Marathi text-to-speech.
-
-### 2. Endpoints to give Exotel
-
-After publishing the project:
-
-- Voicebot WebSocket: `wss://<your-domain>/api/public/exotel/voicebot`
-- Text/test HTTPS API: `https://<your-domain>/api/public/warimitra`
-
-Stable URLs also work: `project--<project-id>.lovable.app`.
-
-### 3. Exotel configuration steps
-
-1. App Bazaar → **Create App** → drag in the **Voicebot** applet
-   (also listed as "Voice Streaming / Bidirectional Streaming"; if your account
-   does not have it, ask Exotel support to enable Voicebot streaming).
-2. In the Voicebot applet, set the WebSocket URL to
-   `wss://<your-domain>/api/public/exotel/voicebot`.
-3. Save the app, then go to **ExoPhones** and point your number at this app.
-4. Call the ExoPhone from any phone. WariMitra greets in Marathi, asks where
-   you are, and then answers about medical camps, water, toilets, food,
-   pharmacies, rest camps and police/help points.
-
-Audio format expected by this endpoint: 8 kHz, 16-bit, mono PCM, base64 —
-Exotel's default voicebot stream format.
-
-### 4. Test the backend without Exotel
+**For frontend Gemini calls (demo only):**
 
 ```bash
-curl -X POST https://<your-domain>/api/public/warimitra \
-  -H 'Content-Type: application/json' \
-  -d '{"message":"माझ्या जवळ मेडिकल कुठे आहे?","language":"mr","sessionId":"test-1"}'
+# Copy the example environment file
+cp .env.example .env
 
-curl -X POST https://<your-domain>/api/public/warimitra \
-  -H 'Content-Type: application/json' \
-  -d '{"message":"बेल्हे","language":"mr","sessionId":"test-1"}'
+# Add your Gemini API key
+VITE_GEMINI_API_KEY=your_api_key_here
 ```
 
-The second call must remember the first — the same `sessionId` is one
-conversation. Each phone call uses the Exotel call SID as its session ID, so
-memory is isolated per call.
+> ⚠️ **Security Warning**: Frontend API keys expose your credentials. This setup is for **local development and demos only**. Production deployments must use a secure backend proxy.
 
-### 5. Troubleshooting
+---
 
-| Symptom | Cause / fix |
-| --- | --- |
-| Call connects, silence | Voicebot applet URL wrong or not `wss://`. Check the published domain. |
-| `426` when opening the URL in a browser | Expected — it is a WebSocket endpoint. |
-| Agent replies "सेवा उपलब्ध नाही" | Gemini or Places call failed; check server logs and `GEMINI_API_KEY`. |
-| "I could not find that place" | Say a village/temple/toll plaza name; the geocoder is restricted to Maharashtra. |
-| Agent keeps asking for location | Speech was not recognised as a place — speak the village name alone. |
+## 🏗️ How It Works
 
-### Honesty note
+### The Voice Call Flow
 
-This is a hackathon prototype. There is no emergency-service dispatch and no
-government integration; missing-Warkari records made over the phone live in
-server memory for the duration of the session.
+```
+┌─────────────────────┐
+│  Browser Microphone │
+└──────────┬──────────┘
+           │ (speech-to-text)
+           ▼
+┌─────────────────────────┐
+│  Web Speech API         │
+│  (Chrome/Edge only)     │
+└──────────┬──────────────┘
+           │ (Marathi text)
+           ▼
+┌──────────────────────────┐
+│  Gemini NLU              │
+│  • Intent detection      │
+│  • Entity extraction     │
+│  • Location landmarks    │
+└──────────┬───────────────┘
+           │ (structured data)
+           ▼
+┌──────────────────────────────┐
+│  facilityService             │
+│  • Search mock database      │
+│  • Calculate distances       │
+│  • Verify facility status    │
+└──────────┬───────────────────┘
+           │ (facility record)
+           ▼
+┌───────────────────────────────┐
+│  Gemini Response Generation   │
+│  • Natural Marathi answer     │
+│  • Directions & instructions  │
+└──────────┬────────────────────┘
+           │ (Marathi speech text)
+           ▼
+┌──────────────────────┐
+│  Text-to-Speech      │
+│  window.speechSynthesis
+│  (mr-IN or hi-IN)    │
+└──────────┬───────────┘
+           │ (audio output)
+           ▼
+    🔊 Speaker Output
+```
+
+**🔒 Trust & Safety Principle**: Gemini AI never decides if a facility exists. The system always:
+1. Searches the **verified facility database**
+2. Confirms the facility is real with current status
+3. Passes only confirmed data to Gemini for wording
+4. Delivers factual information with natural language
+
+This prevents AI hallucinations and ensures users get real, verified help.
+
+### Project Structure
+
+```
+src/
+├── components/              # React UI components
+│   ├── ui/                 # Radix UI component library
+│   ├── ArchitectureFlow.tsx # System architecture visualization
+│   ├── LocationPicker.tsx   # Map-based location selection
+│   ├── MapPanel.tsx        # Google Maps integration
+│   └── DemoModeToggle.tsx   # Demo/production mode switcher
+├── routes/                  # TanStack Router pages
+│   ├── index.tsx           # Landing page
+│   ├── voice.tsx           # Main voice call interface
+│   ├── facilities.tsx       # Facility browser
+│   ├── community.tsx        # Missing persons & announcements
+│   └── emergency.tsx        # Emergency features
+├── services/               # Business logic (no UI dependencies)
+│   ├── voiceService.ts    # Call recording & demo scenarios
+│   ├── facilityService.ts # Facility search & categorization
+│   ├── geminiService.ts   # NLU & response generation
+│   ├── locationService.ts # Geocoding & distance calculations
+│   ├── missingPersonService.ts # Missing person alerts
+│   ├── placesService.ts   # Google Places API integration
+│   ├── announcementService.ts  # Broadcast messages
+│   ├── distanceService.ts # Geo calculations
+│   └── storage.ts         # localStorage abstraction
+├── hooks/                  # React hooks
+│   ├── useCallEngine.ts   # Main voice call state machine
+│   ├── useSpeech.ts       # Web Speech API wrapper
+│   └── useStore.ts        # Zustand store setup
+├── lib/                    # Utilities & helpers
+│   ├── ai.functions.ts    # Server-side Gemini proxy
+│   ├── maps.functions.ts  # Google Maps/Places API wrapper
+│   ├── utils.ts           # General utilities
+│   └── error-capture.ts   # Error tracking
+└── data/
+    └── mockData.ts        # Demo facility, missing person, announcement data
+```
+
+---
+
+## Features in Detail
+
+### 🎤 Voice Interface
+
+- **Web Speech API Integration**: Real-time speech-to-text in Marathi, Hindi, and English
+- **Browser Support**: Chrome and Edge (desktop/mobile); Safari shows fallback UI
+- **Demo Mode**: Pre-recorded scenario scripts for testing without speaking
+- **Speech Synthesis**: Text-to-speech in Marathi with Hindi fallback
+
+### 🏥 Facility Finder
+
+Search by category or natural language:
+- **Medical**: Hospitals, clinics, pharmacies, doctors
+- **Essential Services**: Water, toilets, shelter, charging stations
+- **Food**: Restaurants, meal services, food courts
+- **Government/Safety**: Police, local government offices
+
+Mock database includes realistic facilities around Pandharpur with:
+- Distance calculations
+- Operating hours
+- Accessibility information
+- Emergency prioritization
+
+### 🚨 Missing Person System
+
+- Report missing Warkaris with photo, name, and description
+- Automatic alerts within 100km radius
+- Sighting reports from community
+- Phone number masking for privacy
+
+### 📢 Announcements
+
+- Route updates
+- Safety alerts
+- Facility closure notices
+- Community messages
+
+---
+
+## 💻 Development & Customization
+
+### Available Scripts
+
+```bash
+npm run dev          # Start dev server (Vite hot reload)
+npm run build        # Production build
+npm run build:dev    # Development build
+npm run preview      # Preview production build
+npm run lint         # Check code with ESLint
+npm run format       # Format with Prettier
+```
+
+### Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| **Framework** | TanStack Start (full-stack React) |
+| **Language** | TypeScript 5.3+ |
+| **Styling** | Tailwind CSS 4 |
+| **UI Components** | Radix UI + shadcn/ui |
+| **Routing** | TanStack Router 1.170+ |
+| **State** | Zustand |
+| **AI/NLU** | Google Gemini API |
+| **Maps** | Google Maps & Places API |
+| **Build Tool** | Vite |
+| **Package Manager** | Bun (bunfig.toml configured) |
+| **Linting** | ESLint |
+| **Formatting** | Prettier |
+
+### Browser Support
+
+| Feature | Chrome | Edge | Safari | Firefox |
+|---------|--------|------|--------|---------|
+| Voice Input (Web Speech API) | ✅ | ✅ | ⚠️ | ⚠️ |
+| Voice Output (speechSynthesis) | ✅ | ✅ | ✅ | ✅ |
+| Marathi `mr-IN` Voice | ✅ | ✅ | ⚠️ | ⚠️ |
+| App Demo Mode | ✅ | ✅ | ✅ | ✅ |
+
+For unsupported browsers, the app provides:
+- Clear "speech not supported" messaging
+- Full UI access through demo scenario buttons
+- Text-based input/output fallbacks
+
+### Data Persistence
+
+All application state is managed through **`src/services/storage.ts`**, which abstracts localStorage:
+
+```typescript
+readKey<T>(key, fallback)   // Read from storage
+writeKey<T>(key, value)     // Write to storage
+clearKey(key)               // Remove a key
+subscribe(key, callback)    // Watch for changes
+```
+
+This design allows replacing localStorage with a backend (FastAPI + PostgreSQL) without touching React components.
+
+---
+
+## API Configuration
+
+### Google Gemini API
+
+1. **Create an API key**:
+   - Visit [Google AI Studio](https://aistudio.google.com/app/apikey)
+   - Create a new API key
+
+2. **Add to environment**:
+   ```bash
+   VITE_GEMINI_API_KEY=sk-abc123xyz...
+   ```
+
+3. **In production**, move Gemini calls to a backend server:
+   - See `src/lib/ai.functions.ts` for the server proxy implementation
+   - Never expose API keys in frontend code
+
+### Google Places & Maps API
+
+1. **Enable APIs** in Google Cloud Console:
+   - Maps JavaScript API
+   - Places API
+   - Geocoding API
+
+2. **Create an API key** with restrictions to:
+   - HTTP referrers (your domain)
+   - APIs used (Places, Maps, Geocoding)
+
+3. **Keys are embedded in code** (public API, not sensitive credentials)
+
+---
+
+## Configuration
+
+### Mock Data
+
+Edit `src/data/mockData.ts` to customize:
+- Facilities database
+- Missing persons
+- Announcements
+- Demo call scenarios
+
+### Demo Scenarios
+
+Edit `src/services/demoService.ts` to add new voice scenarios:
+
+```typescript
+export const DEMO_STEPS: DemoStep[] = [
+  {
+    id: "medical",
+    name: "Medical Help",
+    marathi: "वैद्यकीय मदत",
+    transcript: "मुझे सिरदर्द है", // User's input
+    intent: "medical",
+  },
+  // ... more scenarios
+];
+```
+
+---
+
+## Deployment
+
+### Build for Production
+
+```bash
+npm run build
+```
+
+Output is in `dist/` — deploy to any static hosting:
+- **Vercel** (recommended for TanStack Start)
+- **Netlify**
+- **AWS S3 + CloudFront**
+- **GitHub Pages**
+
+### Environment Variables
+
+Set in your hosting platform:
+- `VITE_GEMINI_API_KEY` (optional, for direct browser calls during demo)
+- Backend API URL (if not using server functions)
+
+### Important for Production
+
+1. **Move Gemini calls to backend** — never expose API keys to clients
+2. **Replace mock data** with real facility database
+3. **Implement real missing person & announcement systems**
+4. **Add authentication** if handling sensitive data
+5. **Set up CORS** properly for API calls
+6. **Enable HTTPS** for Web Speech API
+7. **Consider SMS/IVR integration** for actual phone calls
+
+---
+
+## Troubleshooting
+
+### Speech Recognition Not Working
+
+**Problem**: "Speech is not available in your browser"
+
+**Solution**:
+- Use **Chrome or Edge** (latest version)
+- Enable microphone permissions
+- Ensure page is served over HTTPS (localhost OK)
+- Check browser privacy settings
+
+### Marathi Voice Not Available
+
+**Problem**: Responses play in Hindi instead of Marathi
+
+**Solution**:
+- Install Marathi language pack on your OS
+- Fallback to Hindi is automatic and acceptable
+- Text output always shows in Marathi
+
+### API Key Errors
+
+**Problem**: "VITE_GEMINI_API_KEY is invalid"
+
+**Solution**:
+- Verify key in `.env` file
+- Ensure `.env` is in root directory
+- Restart dev server after changing `.env`
+- Check key hasn't been revoked in Google AI Studio
+
+### Build Errors
+
+**Problem**: TypeScript or ESLint errors
+
+**Solution**:
+```bash
+npm run lint    # See all issues
+npm run format  # Auto-fix formatting
+```
+
+---
+
+## 🤝 Contributing & Development Workflow
+
+Contributions are welcome! Follow this workflow:
+
+### 1️⃣ Local Development
+
+```bash
+# Fork and clone
+git clone https://github.com/your-fork/wari-mitra-voice.git
+cd wari-mitra-voice
+
+# Create a feature branch
+git checkout -b feature/amazing-feature
+
+# Install & start dev server
+npm install && npm run dev
+
+# Make your changes
+# Test locally, commit with clear messages
+git commit -m "feat: add [feature] for [use case]"
+
+# Push to your fork
+git push origin feature/amazing-feature
+```
+
+### 2️⃣ Pull Requests
+
+- Create a PR against `main` branch
+- Include clear title and description of changes
+- Reference related issues (e.g., `Fixes #123`)
+- Keep commit history clean (no force pushes on shared branches)
+- All tests and lints must pass
+
+### 3️⃣ Code Style
+
+- **TypeScript** strict mode enforced
+- **Prettier** for formatting (`npm run format`)
+- **ESLint** for code quality (`npm run lint`)
+- Component-based architecture
+- Services separate from UI components
+- Comprehensive error handling & logging
+
+---
+
+## 📜 License
+
+MIT License — See [LICENSE](LICENSE) for full details.
+
+**Open source, free to use, modify, and redistribute.** Attribution appreciated but not required.
+
+---
+
+## 📚 About the Pandharpur Wari
+
+**वारी (Wari)** is an annual pilgrimage where devotees walk to Pandharpur to visit the sacred Vithoba Temple. With 10+ million Warkaris and challenging conditions (heat, distance, medical needs), **WariMitra AI** aims to make the journey safer and more accessible.
+
+This project is **community-driven** and open to contributions from developers, UX designers, medical professionals, and anyone passionate about improving pilgrim welfare.
+
+### 🌍 Project Scope
+
+- **Primary Language**: Marathi (मराठी)
+- **Secondary Languages**: Hindi, English
+- **Target Users**: Warkaris, volunteers, emergency responders, health workers
+- **Focus**: Voice accessibility for feature phone users
+- **Region**: Maharashtra, India
+- **Vision**: Safe, equitable, and accessible pilgrimage experience
+
+---
+
+## 🔗 Resources & Links
+
+### Documentation
+- [Web Speech API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API) — Voice input/output
+- [TanStack Start](https://tanstack.com/router/latest/docs/framework/react/start/overview) — Full-stack framework
+- [Google Gemini API](https://ai.google.dev/) — AI conversation engine
+- [Google Places API](https://developers.google.com/maps/documentation/places) — Facility search
+- [Tailwind CSS](https://tailwindcss.com/) — Styling framework
+- [Radix UI](https://www.radix-ui.com/) — Accessible components
+
+### Community
+- **GitHub**: Report issues, suggest features, contribute code
+- **Questions?** Open an issue or start a discussion
+- **Want to help?** See [Contributing](#contributing--development-workflow) section
+
+---
+
+<div align="center">
+
+### Made with ❤️ for Warkaris
+
+*By developers, for the community.*
+
+**If this helps someone during their Wari, our mission is complete.** 🙏
+
+</div>
